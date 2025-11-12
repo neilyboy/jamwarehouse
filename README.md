@@ -6,13 +6,13 @@
 
 A modern, touch-enabled internet radio streaming application for the ESP32-2432S028R (Cheap Yellow Display) with integrated web interface for easy station management.
 
-## 🎮 **[Try the Interactive Demo!](docs/interactive-demo.html)**
+## 🎮 **[Try the Interactive Demo!](https://neilyboy.github.io/jamwarehouse/interactive-demo.html)**
 
 Experience exactly what your radio will look like before building it! Click through WiFi setup, browse stations, see the player screen, and explore all features in our interactive web demo.
 
 ## 📋 Table of Contents
 
-- [🎮 Interactive Demo](docs/interactive-demo.html) ← **Try it now!**
+- [🎮 Interactive Demo](https://neilyboy.github.io/jamwarehouse/interactive-demo.html) ← **Try it now!**
 - [Features](#features)
 - [Hardware Requirements](#hardware-requirements)
 - [Software Requirements](#software-requirements)

@@ -1,0 +1,21 @@
+type,name,url,icon,parent_folder
+folder,Music,,,/
+folder,News,,,/
+folder,Sports,,,/
+folder,Jazz,,🎷,/Music
+folder,Rock,,🎸,/Music
+folder,Electronic,,🎧,/Music
+station,Smooth Jazz 24/7,http://smoothjazz.cdnstream1.com:8006/live.mp3,🎷,/Music/Jazz
+station,Jazz FM,http://listen.jazz.fm:8000/jazzhigh,🎵,/Music/Jazz
+station,WBGO Jazz 88.3,http://wbgo.streamguys.net/wbgo128,🎺,/Music/Jazz
+station,Classic Rock Radio,http://149.56.195.94:8015/stream,🎸,/Music/Rock
+station,Rock Radio UK,http://149.255.59.3:8084/stream,🤘,/Music/Rock
+station,Planet Rock,http://stream.planetradio.co.uk/planetrock.mp3,🎵,/Music/Rock
+station,Chillout Lounge,http://uk7.internet-radio.com:8226/stream,😌,/Music/Electronic
+station,Dance Wave,http://dancewave.online:8080/dance.mp3,💃,/Music/Electronic
+station,Ibiza Global Radio,http://ibizaglobalradio.streaming-pro.com:8024/ibizaglobalradio.mp3,🎧,/Music/Electronic
+station,BBC World Service,http://stream.live.vc.bbcmedia.co.uk/bbc_world_service,🌍,/News
+station,NPR News,http://npr-ice.streamguys1.com/live.mp3,📻,/News
+station,CNN Audio,http://tunein.streamguys1.com/CNN,📺,/News
+station,Sky Sports Radio,http://edge-audio-03-gos2.sharp-stream.com/talksport2.mp3,⚽,/Sports
+station,ESPN Radio,http://live.amperwave.net/direct/espn-espnam-ibc3,🏈,/Sports

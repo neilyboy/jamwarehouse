@@ -1,0 +1,79 @@
+{
+  "folders": [
+    {
+      "name": "Music",
+      "iconPath": "📁",
+      "parent": "/"
+    },
+    {
+      "name": "News",
+      "iconPath": "📰",
+      "parent": "/"
+    },
+    {
+      "name": "Jazz",
+      "iconPath": "🎷",
+      "parent": "/Music"
+    },
+    {
+      "name": "Rock",
+      "iconPath": "🎸",
+      "parent": "/Music"
+    },
+    {
+      "name": "Electronic",
+      "iconPath": "🎧",
+      "parent": "/Music"
+    }
+  ],
+  "stations": [
+    {
+      "name": "Smooth Jazz 24/7",
+      "url": "http://smoothjazz.cdnstream1.com:8006/live.mp3",
+      "icon": "🎷",
+      "parent": "/Music/Jazz"
+    },
+    {
+      "name": "Jazz FM",
+      "url": "http://listen.jazz.fm:8000/jazzhigh",
+      "icon": "🎵",
+      "parent": "/Music/Jazz"
+    },
+    {
+      "name": "Classic Rock Radio",
+      "url": "http://149.56.195.94:8015/stream",
+      "icon": "🎸",
+      "parent": "/Music/Rock"
+    },
+    {
+      "name": "Rock Radio UK",
+      "url": "http://149.255.59.3:8084/stream",
+      "icon": "🤘",
+      "parent": "/Music/Rock"
+    },
+    {
+      "name": "Chillout Lounge",
+      "url": "http://uk7.internet-radio.com:8226/stream",
+      "icon": "😌",
+      "parent": "/Music/Electronic"
+    },
+    {
+      "name": "Dance Wave",
+      "url": "http://dancewave.online:8080/dance.mp3",
+      "icon": "💃",
+      "parent": "/Music/Electronic"
+    },
+    {
+      "name": "BBC World Service",
+      "url": "http://stream.live.vc.bbcmedia.co.uk/bbc_world_service",
+      "icon": "🌍",
+      "parent": "/News"
+    },
+    {
+      "name": "NPR News",
+      "url": "http://npr-ice.streamguys1.com/live.mp3",
+      "icon": "📻",
+      "parent": "/News"
+    }
+  ]
+}

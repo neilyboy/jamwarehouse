@@ -53,14 +53,15 @@ MAX98357A I2S Audio Amplifier
 ### ESP32-2432S028R Pinout (Relevant Pins)
 
 ```
-ESP32-2432S028R (Bottom View)
+ESP32-2432S028R (Expansion Pins)
 ┌───────────────────────────┐
 │                           │
 │   [USB-C Port]            │
 │                           │
+│  GPIO 22  ●  (I2S LRC)    │
 │  GPIO 25  ●  (I2S DOUT)   │
 │  GPIO 26  ●  (I2S BCLK)   │
-│  GPIO 27  ●  (I2S LRC)    │
+│  GPIO 27  ●  (BACKLIGHT)  │
 │  5V       ●               │
 │  GND      ●               │
 │                           │
@@ -73,9 +74,9 @@ ESP32-2432S028R (Bottom View)
 ESP32-2432S028R          MAX98357A          Speaker
 ───────────────          ─────────          ───────
 
+GPIO 22 ────────────────→ LRC
 GPIO 25 ────────────────→ DIN
 GPIO 26 ────────────────→ BCLK
-GPIO 27 ────────────────→ LRC
 5V      ────────────────→ VIN
 GND     ────────────────→ GND
                           SD ───────────→ VIN (always on)
@@ -83,6 +84,8 @@ GND     ────────────────→ GND
                           
                           SPEAKER+ ─────→ Speaker (+) Red
                           SPEAKER- ─────→ Speaker (-) Black
+                          
+NOTE: GPIO 27 is used for display backlight - do NOT connect to MAX98357A!
 ```
 
 ### Step-by-Step Wiring
@@ -111,10 +114,10 @@ GND     ────────────────→ GND
    - Locate GPIO 26 pad/header
    - Solder green wire to GPIO 26
 
-3. **GPIO 27 (I2S LRC):**
-   - Locate GPIO 27 pad/header
-   - Solder yellow wire to GPIO 27
-   - **NOTE:** GPIO 27 is also used for TFT backlight. This is fine as we can share this pin.
+3. **GPIO 22 (I2S LRC):**
+   - Locate GPIO 22 on expansion header or CN1 connector
+   - Solder yellow wire to GPIO 22
+   - **NOTE:** GPIO 27 is used for display backlight - we use GPIO 22 instead for I2S_LRC
 
 4. **5V:**
    - Solder red wire to 5V pad/header
@@ -140,7 +143,7 @@ GND     ────────────────→ GND
    - Connect green wire from ESP32 GPIO 26 to MAX98357A BCLK
 
 5. **LRC (I2S Word Select / Left-Right Clock):**
-   - Connect yellow wire from ESP32 GPIO 27 to MAX98357A LRC
+   - Connect yellow wire from ESP32 GPIO 22 to MAX98357A LRC
 
 6. **SD (Shutdown):**
    - Bridge MAX98357A SD pin to VIN pin for always-on operation
@@ -303,7 +306,7 @@ GPIO 26 ───┬───────→ BCLK                   BCLK ←─�
            └──────────────────────────────────────────────┘
            (shared clock)
 
-GPIO 27 ───┬───────→ LRC                    LRC ←─────────┐
+GPIO 22 ───┬───────→ LRC                    LRC ←─────────┐
            │                                               │
            └──────────────────────────────────────────────┘
            (shared word select)

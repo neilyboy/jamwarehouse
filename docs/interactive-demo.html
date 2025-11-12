@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jam Wysteria - Interactive Demo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .device-frame {
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+        .screen {
+            width: 320px;
+            height: 240px;
+            background: #000;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        .screen-content {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        .screen-content.active { display: block; }
+        
+        /* Splash Screen */
+        .splash {
+            background: linear-gradient(135deg, #00FFFF 0%, #FF00FF 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+        .splash img {
+            max-width: 200px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+        .splash h2 {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .splash p {
+            color: rgba(255,255,255,0.9);
+            font-size: 12px;
+        }
+        
+        /* Header Bar */
+        .header-bar {
+            background: #00FFFF;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .header-bar h3 {
+            color: white;
+            font-size: 16px;
+        }
+        .back-btn {
+            position: absolute;
+            left: 10px;
+            width: 25px;
+            height: 25px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.5); }
+        
+        /* Content Area */
+        .content {
+            background: #000;
+            height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        
+        /* Buttons */
+        .btn {
+            background: #00FFFF;
+            color: white;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+            margin: 10px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn:hover {
+            background: #00CCCC;
+            transform: translateY(-2px);
+        }
+        
+        /* Network/Station Items */
+        .item {
+            background: #1a1a1a;
+            border: 1px solid #00FFFF;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        .item:hover {
+            background: #2a2a2a;
+            transform: translateX(5px);
+        }
+        .item .icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        .item .info { flex: 1; }
+        .item .name {
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .item .subtitle {
+            color: #888;
+            font-size: 11px;
+        }
+        
+        /* Keyboard */
+        .keyboard {
+            background: #000;
+            padding: 5px;
+        }
+        .keyboard-input {
+            background: #1a1a1a;
+            border: 2px solid #00FFFF;
+            border-radius: 4px;
+            padding: 6px;
+            margin-bottom: 5px;
+            color: white;
+            height: 22px;
+            font-size: 11px;
+        }
+        .kbd-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3px;
+        }
+        .key {
+            background: #333;
+            border: 1px solid #555;
+            border-radius: 2px;
+            padding: 4px;
+            margin: 1px;
+            min-width: 18px;
+            height: 22px;
+            color: white;
+            font-size: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.1s;
+        }
+        .key:hover {
+            background: #00FFFF;
+            color: #000;
+        }
+        .key.sp { background: #555; min-width: 25px; }
+        .key.space { min-width: 100px; }
+        
+        /* Player */
+        .player {
+            background: #000;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        .player .station-name {
+            font-size: 14px;
+            color: #00FFFF;
+            margin-bottom: 15px;
+        }
+        .player .album-art {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 15px;
+            background: #1a1a1a;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            border: 2px solid #00FFFF;
+        }
+        .player .metadata {
+            margin-bottom: 15px;
+            font-size: 11px;
+        }
+        .player .title {
+            margin-bottom: 3px;
+        }
+        .player .artist {
+            color: #888;
+            font-size: 10px;
+        }
+        .player .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .player .control-btn {
+            width: 40px;
+            height: 40px;
+            background: #00FFFF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .player .control-btn:hover {
+            transform: scale(1.1);
+        }
+        .player .control-btn.stop {
+            background: #F800;
+        }
+        .player .volume-bar {
+            height: 18px;
+            background: #1a1a1a;
+            border-radius: 9px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        .player .volume-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00FFFF, #FF00FF);
+            width: 60%;
+        }
+        
+        /* Navigation */
+        .nav-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .nav-btn {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .nav-btn:hover, .nav-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        /* Instructions */
+        .instructions {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .instructions h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        .instructions p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎵 Jam Wysteria Interactive Demo</h1>
+        <p>Click anywhere on the screen or use navigation buttons below</p>
+    </div>
+    
+    <div class="device-frame">
+        <div class="screen" id="screen">
+            <!-- Splash Screen -->
+            <div class="screen-content active" id="splash">
+                <div class="splash">
+                    <img src="../logo/jamwarehouse_logo_trans.png" alt="Jam Wysteria" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div style="display:none; font-size:60px;">🎵</div>
+                    <h2>Jam Wysteria</h2>
+                    <p>Internet Radio Boombox</p>
+                    <p style="margin-top: 10px; font-size: 10px;">v1.0.0</p>
+                </div>
+            </div>
+            
+            <!-- WiFi Setup -->
+            <div class="screen-content" id="wifi-setup">
+                <div class="header-bar">
+                    <h3>WiFi Setup</h3>
+                </div>
+                <div class="content" style="text-align: center; padding: 20px; color: white;">
+                    <h2 style="color: #00FFFF; margin-bottom: 15px; font-size: 18px;">Welcome!</h2>
+                    <p style="color: #888; font-size: 12px; margin-bottom: 20px;">Let's connect to WiFi</p>
+                    <div class="btn" onclick="showScreen('network-list')">📡 Scan Networks</div>
+                </div>
+            </div>
+            
+            <!-- Network List -->
+            <div class="screen-content" id="network-list">
+                <div class="header-bar">
+                    <div class="back-btn" onclick="showScreen('wifi-setup')">←</div>
+                    <h3>Select Network</h3>
+                </div>
+                <div class="content">
+                    <div class="item" onclick="showScreen('password')">
+                        <div class="info">
+                            <div class="name">🔒 Home WiFi</div>
+                            <div class="subtitle">Signal: -45 dBm (Excellent)</div>
+                        </div>
+                    </div>
+                    <div class="item" onclick="showScreen('password')">
+                        <div class="info">
+                            <div class="name">🔒 Guest Network</div>
+                            <div class="subtitle">Signal: -67 dBm (Good)</div>
+                        </div>
+                    </div>
+                    <div class="item" onclick="showScreen('password')">
+                        <div class="info">
+                            <div class="name">Coffee Shop</div>
+                            <div class="subtitle">Signal: -72 dBm (Fair)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Password Entry -->
+            <div class="screen-content" id="password">
+                <div class="header-bar">
+                    <div class="back-btn" onclick="showScreen('network-list')">←</div>
+                    <h3>Enter Password</h3>
+                </div>
+                <div class="keyboard">
+                    <div style="color: white; font-size: 10px; margin-bottom: 5px;">Network: Home WiFi</div>
+                    <div class="keyboard-input"><span id="pwd-text"></span><span style="animation: blink 1s infinite;">|</span></div>
+                    <div class="kbd-row">
+                        <div class="key" onclick="typeChar('q')">q</div>
+                        <div class="key" onclick="typeChar('w')">w</div>
+                        <div class="key" onclick="typeChar('e')">e</div>
+                        <div class="key" onclick="typeChar('r')">r</div>
+                        <div class="key" onclick="typeChar('t')">t</div>
+                        <div class="key" onclick="typeChar('y')">y</div>
+                        <div class="key" onclick="typeChar('u')">u</div>
+                        <div class="key" onclick="typeChar('i')">i</div>
+                        <div class="key" onclick="typeChar('o')">o</div>
+                        <div class="key" onclick="typeChar('p')">p</div>
+                    </div>
+                    <div class="kbd-row">
+                        <div class="key" onclick="typeChar('a')">a</div>
+                        <div class="key" onclick="typeChar('s')">s</div>
+                        <div class="key" onclick="typeChar('d')">d</div>
+                        <div class="key" onclick="typeChar('f')">f</div>
+                        <div class="key" onclick="typeChar('g')">g</div>
+                        <div class="key" onclick="typeChar('h')">h</div>
+                        <div class="key" onclick="typeChar('j')">j</div>
+                        <div class="key" onclick="typeChar('k')">k</div>
+                        <div class="key" onclick="typeChar('l')">l</div>
+                    </div>
+                    <div class="kbd-row">
+                        <div class="key sp">⇧</div>
+                        <div class="key" onclick="typeChar('z')">z</div>
+                        <div class="key" onclick="typeChar('x')">x</div>
+                        <div class="key" onclick="typeChar('c')">c</div>
+                        <div class="key" onclick="typeChar('v')">v</div>
+                        <div class="key" onclick="typeChar('b')">b</div>
+                        <div class="key" onclick="typeChar('n')">n</div>
+                        <div class="key" onclick="typeChar('m')">m</div>
+                        <div class="key sp">123</div>
+                    </div>
+                    <div class="kbd-row">
+                        <div class="key sp" onclick="showScreen('home')">Done</div>
+                        <div class="key space" onclick="typeChar(' ')">Space</div>
+                        <div class="key sp" onclick="backspace()">←</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Home Screen -->
+            <div class="screen-content" id="home">
+                <div class="header-bar">
+                    <h3>Jam Wysteria</h3>
+                </div>
+                <div class="content">
+                    <div class="item" onclick="showScreen('player')">
+                        <div class="icon">📁</div>
+                        <div class="info">
+                            <div class="name">Music</div>
+                            <div class="subtitle">6 stations</div>
+                        </div>
+                    </div>
+                    <div class="item" onclick="showScreen('player')">
+                        <div class="icon">📻</div>
+                        <div class="info">
+                            <div class="name">BBC World Service</div>
+                            <div class="subtitle">News & Talk</div>
+                        </div>
+                    </div>
+                    <div class="item" onclick="showScreen('player')">
+                        <div class="icon">🎷</div>
+                        <div class="info">
+                            <div class="name">Smooth Jazz 24/7</div>
+                            <div class="subtitle">128 kbps MP3</div>
+                        </div>
+                    </div>
+                    <div class="item" onclick="showScreen('player')">
+                        <div class="icon">🎸</div>
+                        <div class="info">
+                            <div class="name">Classic Rock Radio</div>
+                            <div class="subtitle">320 kbps AAC</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Player Screen -->
+            <div class="screen-content" id="player">
+                <div class="header-bar">
+                    <div class="back-btn" onclick="showScreen('home')">←</div>
+                    <h3>Now Playing</h3>
+                </div>
+                <div class="player">
+                    <div class="station-name">Smooth Jazz 24/7</div>
+                    <div class="album-art">🎷</div>
+                    <div class="metadata">
+                        <div class="title">Autumn Leaves</div>
+                        <div class="artist">Miles Davis</div>
+                    </div>
+                    <div class="controls">
+                        <div class="control-btn">⏸</div>
+                        <div class="control-btn stop">⏹</div>
+                    </div>
+                    <div style="font-size: 10px; color: #888; margin-bottom: 3px;">🔊 Volume: 12/21</div>
+                    <div class="volume-bar">
+                        <div class="volume-fill"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Settings Screen -->
+            <div class="screen-content" id="settings">
+                <div class="header-bar">
+                    <div class="back-btn" onclick="showScreen('home')">←</div>
+                    <h3>Settings</h3>
+                </div>
+                <div class="content">
+                    <div class="item">
+                        <div class="icon">📶</div>
+                        <div class="info">
+                            <div class="name">WiFi Settings</div>
+                            <div class="subtitle">Connected: Home WiFi</div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="icon">🎨</div>
+                        <div class="info">
+                            <div class="name">Display Settings</div>
+                            <div class="subtitle">Brightness: 80%</div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="icon">🔊</div>
+                        <div class="info">
+                            <div class="name">Audio Settings</div>
+                            <div class="subtitle">Volume: 12/21</div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="icon">ℹ️</div>
+                        <div class="info">
+                            <div class="name">About</div>
+                            <div class="subtitle">Version 1.0.0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="nav-buttons">
+        <button class="nav-btn active" onclick="showScreen('splash')">Splash</button>
+        <button class="nav-btn" onclick="showScreen('wifi-setup')">WiFi Setup</button>
+        <button class="nav-btn" onclick="showScreen('network-list')">Networks</button>
+        <button class="nav-btn" onclick="showScreen('password')">Keyboard</button>
+        <button class="nav-btn" onclick="showScreen('home')">Home</button>
+        <button class="nav-btn" onclick="showScreen('player')">Player</button>
+        <button class="nav-btn" onclick="showScreen('settings')">Settings</button>
+    </div>
+    
+    <div class="instructions">
+        <h3>📱 How This Works</h3>
+        <p><strong>This demo shows EXACTLY what you'll see on your device!</strong></p>
+        <p>• <strong>320x240 pixels</strong> - Same resolution as the real 2.8" TFT display</p>
+        <p>• <strong>Click anywhere</strong> on the screen to navigate</p>
+        <p>• <strong>Use buttons below</strong> to jump to any screen</p>
+        <p>• <strong>Try the keyboard</strong> - Type your WiFi password just like on the device</p>
+        <p style="margin-top: 15px;"><strong>Screens included:</strong> Boot splash, WiFi setup wizard, network scanner, password entry with full keyboard, home with stations, now playing with controls, and settings menu.</p>
+    </div>
+    
+    <script>
+        let pwdText = '';
+        
+        function showScreen(screenId) {
+            // Hide all screens
+            document.querySelectorAll('.screen-content').forEach(s => s.classList.remove('active'));
+            // Show selected screen
+            document.getElementById(screenId).classList.add('active');
+            // Update nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+        
+        function typeChar(char) {
+            pwdText += char;
+            document.getElementById('pwd-text').textContent = '•'.repeat(pwdText.length);
+        }
+        
+        function backspace() {
+            pwdText = pwdText.slice(0, -1);
+            document.getElementById('pwd-text').textContent = '•'.repeat(pwdText.length);
+        }
+        
+        // Auto-advance from splash
+        setTimeout(() => {
+            showScreen('wifi-setup');
+            document.querySelectorAll('.nav-btn')[1].classList.add('active');
+            document.querySelectorAll('.nav-btn')[0].classList.remove('active');
+        }, 3000);
+    </script>
+    
+    <style>
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+    </style>
+</body>
+</html>

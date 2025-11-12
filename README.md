@@ -6,12 +6,18 @@
 
 A modern, touch-enabled internet radio streaming application for the ESP32-2432S028R (Cheap Yellow Display) with integrated web interface for easy station management.
 
+## 🎮 **[Try the Interactive Demo!](docs/interactive-demo.html)**
+
+Experience exactly what your radio will look like before building it! Click through WiFi setup, browse stations, see the player screen, and explore all features in our interactive web demo.
+
 ## 📋 Table of Contents
 
+- [🎮 Interactive Demo](docs/interactive-demo.html) ← **Try it now!**
 - [Features](#features)
 - [Hardware Requirements](#hardware-requirements)
 - [Software Requirements](#software-requirements)
 - [Hardware Assembly](#hardware-assembly)
+- [Pin Reference](docs/PIN_REFERENCE.md) ← **Important!**
 - [Installation](#installation)
 - [Usage](#usage)
 - [Web Interface](#web-interface)
@@ -115,9 +121,9 @@ ESP32-2432S028R → MAX98357A Audio Amplifier
 
 ESP32 Pin    →    MAX98357A Pin    Function
 ─────────────────────────────────────────────
+GPIO 22      →    LRC              I2S Word Select
 GPIO 25      →    DIN (Data In)    I2S Data
 GPIO 26      →    BCLK             I2S Clock
-GPIO 27      →    LRC              I2S Word Select
 5V           →    VIN              Power (+5V)
 GND          →    GND              Ground
                   SD               Shutdown (connect to VIN for always-on)
@@ -128,6 +134,9 @@ MAX98357A → Speaker
 -            →    Speaker -
 ```
 
+**⚠️ Important:** GPIO 27 is used for display backlight! Use GPIO 22 for I2S_LRC.  
+See [PIN_REFERENCE.md](docs/PIN_REFERENCE.md) for complete pin details.
+
 ### Assembly Steps
 
 1. **Prepare the ESP32 Board**
@@ -135,7 +144,7 @@ MAX98357A → Speaker
    - Ensure the display protector (if included) is properly installed
 
 2. **Connect the Audio Amplifier**
-   - Solder wires to the ESP32 breakout pins (GPIO 25, 26, 27)
+   - Solder wires to the ESP32 breakout pins (GPIO 22, 25, 26)
    - Connect 5V and GND from the ESP32 to the MAX98357A
    - For stereo: use two MAX98357A modules (see stereo wiring below)
 

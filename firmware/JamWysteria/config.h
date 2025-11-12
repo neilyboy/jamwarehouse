@@ -34,7 +34,7 @@
 // I2S Audio pins (MAX98357A)
 #define I2S_DOUT        25  // DIN on MAX98357A
 #define I2S_BCLK        26  // BCLK on MAX98357A
-#define I2S_LRC         27  // LRC on MAX98357A
+#define I2S_LRC         22  // LRC on MAX98357A (GPIO 22 available on expansion header)
 
 // SD Card pins
 #define SD_CS           5

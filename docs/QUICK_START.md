@@ -23,12 +23,14 @@ Connect the MAX98357A to ESP32 as follows:
 
 | ESP32 Pin | MAX98357A Pin | Wire Color (suggested) |
 |-----------|---------------|------------------------|
+| GPIO 22   | LRC          | Yellow                 |
 | GPIO 25   | DIN          | Blue                   |
 | GPIO 26   | BCLK         | Green                  |
-| GPIO 27   | LRC          | Yellow                 |
 | 5V        | VIN          | Red                    |
 | GND       | GND          | Black                  |
 | -         | SD → VIN     | (Bridge on amplifier)  |
+
+**Important**: GPIO 27 is used for display backlight. Use GPIO 22 for I2S_LRC.
 
 **Speaker Connection:**
 - MAX98357A SPEAKER+ → Speaker (+) Red

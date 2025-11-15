@@ -63,6 +63,13 @@ list_ports() {
 do_build() {
     echo -e "${BLUE}🔨 Building firmware...${NC}"
     cd "$PROJECT_ROOT"
+    
+    # Copy platformio.ini to firmware directory for older PlatformIO versions
+    if [ ! -f "$FIRMWARE_SRC/platformio.ini" ]; then
+        cp platformio.ini "$FIRMWARE_SRC/"
+    fi
+    
+    cd "$FIRMWARE_SRC"
     pio run
     echo
     echo -e "${GREEN}✓ Build complete!${NC}"
@@ -74,10 +81,16 @@ do_upload() {
     echo -e "${BLUE}📤 Building and uploading firmware...${NC}"
     cd "$PROJECT_ROOT"
     
+    # Copy platformio.ini to firmware directory for older PlatformIO versions
+    if [ ! -f "$FIRMWARE_SRC/platformio.ini" ]; then
+        cp platformio.ini "$FIRMWARE_SRC/"
+    fi
+    
     # Check if port is specified in platformio.ini or auto-detect
     echo -e "${YELLOW}Note: Make sure your ESP32 is connected via USB${NC}"
     echo
     
+    cd "$FIRMWARE_SRC"
     pio run --target upload
     echo
     echo -e "${GREEN}✓ Upload complete!${NC}"
@@ -89,15 +102,21 @@ do_monitor() {
     echo -e "${BLUE}📟 Opening serial monitor (115200 baud)${NC}"
     echo -e "${YELLOW}Press Ctrl+C to exit${NC}"
     echo
-    cd "$PROJECT_ROOT"
-    pio device monitor --baud 115200 --filter esp32_exception_decoder
+    pio device monitor --baud 115200
 }
 
 # Function to clean
 do_clean() {
     echo -e "${BLUE}🧹 Cleaning build files...${NC}"
     cd "$PROJECT_ROOT"
-    pio run --target clean
+    
+    # Clean in firmware directory if platformio.ini exists there
+    if [ -f "$FIRMWARE_SRC/platformio.ini" ]; then
+        cd "$FIRMWARE_SRC"
+        pio run --target clean
+        rm -rf .pio
+    fi
+    
     echo -e "${GREEN}✓ Clean complete!${NC}"
 }
 
@@ -105,8 +124,14 @@ do_clean() {
 do_deps() {
     echo -e "${BLUE}📦 Installing/updating dependencies...${NC}"
     cd "$PROJECT_ROOT"
-    pio pkg install
-    pio pkg update
+    
+    # Copy platformio.ini to firmware directory for older PlatformIO versions
+    if [ ! -f "$FIRMWARE_SRC/platformio.ini" ]; then
+        cp platformio.ini "$FIRMWARE_SRC/"
+    fi
+    
+    cd "$FIRMWARE_SRC"
+    pio lib install
     echo -e "${GREEN}✓ Dependencies installed!${NC}"
 }
 

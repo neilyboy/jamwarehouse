@@ -6,19 +6,21 @@
 
 A modern, touch-enabled internet radio streaming application for the ESP32-2432S028R (Cheap Yellow Display) with integrated web interface for easy station management.
 
-## 🎮 **[Try the Interactive Demo!](https://neilyboy.github.io/jamwarehouse/interactive-demo.html)**
+## 🎮 **[Try the Interactive Demo!](docs/interactive-demo.html)**
 
 Experience exactly what your radio will look like before building it! Click through WiFi setup, browse stations, see the player screen, and explore all features in our interactive web demo.
 
 ## 📋 Table of Contents
 
-- [🎮 Interactive Demo](https://neilyboy.github.io/jamwarehouse/interactive-demo.html) ← **Try it now!**
+- [🎮 Interactive Demo](docs/interactive-demo.html) ← **Try it now!**
 - [Features](#features)
 - [Hardware Requirements](#hardware-requirements)
 - [Software Requirements](#software-requirements)
 - [Hardware Assembly](#hardware-assembly)
 - [Pin Reference](docs/PIN_REFERENCE.md) ← **Important!**
 - [Installation](#installation)
+  - [CLI Build Guide](docs/CLI_BUILD_GUIDE.md) ← **⚡ Fast Ubuntu/Linux method**
+  - [Arduino IDE Method](#arduino-ide-method)
 - [Usage](#usage)
 - [Web Interface](#web-interface)
 - [Station Management](#station-management)
@@ -175,6 +177,41 @@ Right Channel:
 ```
 
 ## 📥 Installation
+
+### 🎯 Choose Your Build Method
+
+**Two methods are available:**
+
+1. **🖥️ Arduino IDE** (Recommended for beginners)
+   - Visual interface
+   - Easy library management
+   - Great for learning
+   - Follow steps below
+
+2. **⚡ PlatformIO CLI** (Recommended for developers)
+   - Faster builds (10-30s incremental vs 60-90s)
+   - Command-line workflow
+   - Perfect for Ubuntu/Linux
+   - Better for automation
+   - **[Complete CLI Build Guide →](docs/CLI_BUILD_GUIDE.md)**
+
+**Quick CLI Setup:**
+```bash
+# Install PlatformIO
+pip install platformio
+
+# Make build script executable
+chmod +x build.sh
+
+# Build and flash
+./build.sh upload
+```
+
+For full CLI instructions, see **[docs/CLI_BUILD_GUIDE.md](docs/CLI_BUILD_GUIDE.md)**
+
+---
+
+### Arduino IDE Method
 
 ### Step 1: Install Arduino IDE and ESP32 Support
 
